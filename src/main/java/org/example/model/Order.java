@@ -1,5 +1,8 @@
 package org.example.model;
 
+import lombok.ToString;
+import org.example.config.AppConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +11,7 @@ public class Order {
     private final List<OrderItem> items;
     private OrderStatus status;
     private Discount discount = new NoDiscount();
+    private Tax tax = new Tax(AppConfig.getInstance().getTaxRate());
 
     public Order(Builder builder) {
         this.customerName = builder.customerName;
@@ -27,7 +31,8 @@ public class Order {
         for(OrderItem item : items){
             total += item.calculateTotal();
         }
-        return discount.apply(total);
+        total = discount.apply(total);
+        return tax.apply(total);
     }
 
     public void markAsPaid(){
@@ -75,5 +80,14 @@ public class Order {
             }
             return new Order(this);
         }
+    }
+    @Override public String toString(){
+        StringBuilder result = new StringBuilder();
+        result.append("Customer: ").append(customerName).append("\n");
+        result.append("Items: \n");
+        for(OrderItem item : items){
+            result.append(item.toString()).append("\n");
+        }
+        return result.toString();
     }
 }

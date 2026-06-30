@@ -7,7 +7,7 @@ public class CreditCardPayment extends PaymentMethod {
     private final String cardHolderName;
 
     public CreditCardPayment(String cardNumber, String cardHolderName) {
-        super("CreditCard");
+        super("Credit Card");
 
         // there was a todo to perform basic validations in processPayment
         // but I would prefer to place them in the constructor, so here you go
